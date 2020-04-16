@@ -42,13 +42,9 @@ def random_comb(n):
 def start(request, evaluation_id):
     evaluation = Evaluation.objects.get(pk=evaluation_id)
     tgt_list = np.random.permutation(evaluation.n_data)[:evaluation.number_of_questions()//2]
-    tgt_list = [(f"{i+91:03}.wav", *random_comb(10), False) for i in tgt_list]
-    tgt_list2 = [(*t, True) for t in tgt_list]
-    c = randint(0, 1)
-    if c==0:
-        tgt_list = tgt_list + tgt_list2
-    else:
-        tgt_list = tgt_list2 + tgt_list
+    tgt_list = [(f"{i+91:03}.wav", *random_comb(10), randint(0, 1)==0) for i in tgt_list]
+    tgt_list2 = [(*t[:3], not t[3]) for t in tgt_list]
+    tgt_list = tgt_list + tgt_list2
     task = evaluation.task_set.create()
     for i in range(0, evaluation.number_of_questions()):
         q = task.question_set.create(
@@ -122,3 +118,18 @@ def result(request, task_id):
         'first_q': first_q
     }
     return render(request, 'polls/result.html', context)
+
+def total(request, evaluation_id):
+    evaluation = Evaluation.objects.get(pk=evaluation_id)
+    a = 0
+    b = 0
+    for t in evaluation.task_set.all():
+        a += t.question_set.filter(is_former_better__exact=True).count()
+        b += t.question_set.filter(is_former_better__exact=False).count()
+    context = {
+        "method_a": evaluation.method_a,
+        "method_b": evaluation.method_b,
+        "count_a": a,
+        "count_b": b
+    }
+    return render(request, 'polls/total.html', context)
