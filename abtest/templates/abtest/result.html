@@ -1,0 +1,18 @@
+{% if valid %}
+    <div>
+        <p>お疲れさまでした。</p>
+        <p>以下のテキストを提出してください。</p>
+    </div>
+    <hr>
+    <div>
+    {% for question in questions %}
+        <p>
+            {{question.task.id}}, {{question.id}}, {{question.is_former_better}}
+        </p>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>何らかの原因により、提出されていない回答があります。</p>
+    <p>お手数ですが以下のリンクから再開してください。</p>
+    <a href="{% url 'abtest:question' first_q.task.id first_q.order %}">再開</a>
+{% endif %}

@@ -1,0 +1,29 @@
+<h2>{{question.order}}/{{question.task.evaluation.number_of_questions}}</h2>
+<div>
+    <p>再生ボタンを押すと、ある人（参照話者）の音声のあと、人工的に合成された音声が2回再生されます。</p>
+    <p>人工的に合成された音声のうち、どちらの話者性（声の響き）が参照話者に近いかを答えてください。</p>
+</div>
+<hr>
+<audio
+    id="wave"
+    onended="onEnded();"
+>
+    <source src="{% url 'abtest:wave' question.id %}">
+</audio>
+<div>
+    <button onclick="play();">再生</button>
+    <form action="{% url 'abtest:submit' question.id %}" method="post">
+        {% csrf_token %}
+        <button disabled=true id="buttonA" type=submit name="is_a" value=A>前のほうが参照話者に近い</button>
+        <button disabled=true id="buttonB" type=submit name="is_a" value=B>後のほうが参照話者に近い</button>
+    </form>
+</div>
+<script type="text/javascript">
+    function play(){
+        document.getElementById('wave').play();
+    }
+    function onEnded(){
+        document.getElementById('buttonA').disabled=false;
+        document.getElementById('buttonB').disabled=false;
+    }
+</script>

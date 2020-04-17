@@ -1,0 +1,9 @@
+{% if eval_list %}
+    <ul>
+        {% for evaluation in eval_list %}
+            <li><a href="{% url 'abtest:total' evaluation.id %}">{{ evaluation.method_a }} | {{ evaluation.method_b }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>課題がありません。</p>
+{% endif %}
