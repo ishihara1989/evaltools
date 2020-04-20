@@ -1,7 +1,7 @@
 {% if evaluation %}
 <div>
     <p>
-        ある自然音声と、人工的に変換された2つの音声を聴き、どちらの音声が自然音声の話者性に近いかを答えていただきます。
+        ある自然音声と、人工的に変換された2つの音声を聴き、どちらの音声の音質が良いかを答えていただきます。
     </p>
     <p>全部で{{evaluation.number_of_questions}}問あります。</p>
     <a href="{% url 'abtest:start' evaluation.id %}">開始</a>

@@ -14,9 +14,11 @@ from .models import Evaluation, Task, Question
 eval_root = pathlib.Path('/home/ubuntu/nn/data/eval')
 
 def index(request):
-    context = {}
+    eval_list = Evaluation.objects.all()
+    context = {
+        'eval_list': eval_list
+    }
     return render(request, 'abtest/index.html', context)
-    # return HttpResponse("Hello, world. You're at the abtest index.")
 
 def evaluation(request, evaluation_id):
     evaluation = Evaluation.objects.get(pk=evaluation_id)
